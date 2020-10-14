@@ -13,32 +13,6 @@ const pool = mariadb.createPool({
 
 (async () => {
 
-    // let conn
-    // try {
-    //     conn = await pool.getConnection()
-
-    //     const rows = await conn.query('use del')
-    //     console.log(rows)
-    //     console.log('Activated')
-
-
-    //     const res = await conn.query('SELECT * FROM folio;')
-
-    //     // for(const row of res) {
-    //     //     console.log(row)
-    //     // }
-    //     console.log([...res])
-
-
-    //     await conn.end()
-
-    // } catch (err) {
-    //     console.log(err)
-    //     if (conn) {
-    //         conn.end()
-    //     }
-    // }
-
     const server = new Koa()
     const router = new KoaRouter()
 
@@ -56,7 +30,6 @@ const pool = mariadb.createPool({
         ctx.body = await conn.query('SELECT * FROM cliente;')
         await conn.end()
     })
-
 
     router.post('/clientes', async ctx => {
 
@@ -80,18 +53,18 @@ const pool = mariadb.createPool({
         await conn.end()
     })
 
-    // router.get('/crearCliente/:nombre', async ctx => {
-    //     ctx.body = ctx.params.nombre;
-    //     const nombre = ctx.params.nombre
-    //     const conn = await pool.getConnection()
-    //     await conn.query('USE del')
-    //     await conn.query(`
-    //     INSERT INTO cliente (nombre)
-    //     VALUES (?);
-    //     `, [nombre])
-    //     ctx.body = await conn.query('SELECT * FROM cliente;')
-    //     await conn.end()
-    // })
+    router.get('/crearCliente/:nombre', async ctx => {
+        ctx.body = ctx.params.nombre;
+        const nombre = ctx.params.nombre
+        const conn = await pool.getConnection()
+        await conn.query('USE del')
+        await conn.query(`
+        INSERT INTO cliente (nombre)
+        VALUES (?);
+        `, [nombre])
+        ctx.body = await conn.query('SELECT * FROM cliente;')
+        await conn.end()
+    })
 
     router.get('/home', ctx => {
         ctx.body = 'Welcome home!'
